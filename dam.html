@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Fav Person</title>
+
+    <link rel="shortcut icon" href="https://i.ibb.co/WN4DJgy/Whats-App-Image-2025-10-07-at-20-45-20-54be876c.jpg" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-color: #0d1a2d;
+            --text-color: #e0e0e0;
+            --primary-color: #eaff00; 
+            --secondary-color: #ff69b4;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.2);
+            --font-heading: 'Cormorant Garamond', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            cursor: default;
+        }
+        main { flex-grow: 1; }
+
+        .background-effects {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            pointer-events: none; z-index: -1;
+            background: radial-gradient(circle at center, rgba(13, 26, 45, 0.8) 0%, var(--bg-color) 100%);
+        }
+        
+        .firefly {
+            position: absolute; border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 150, 0.9) 0%, transparent 70%);
+            box-shadow: 0 0 8px var(--primary-color), 0 0 15px var(--secondary-color);
+            animation: move-fly ease-in-out infinite, blink linear infinite;
+        }
+        @keyframes move-fly {
+            0%, 100% { transform: translate(var(--x-start), var(--y-start)); }
+            50% { transform: translate(var(--x-end), var(--y-end)); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .butterfly {
+            position: absolute; width: 50px; height: 50px;
+            background-repeat: no-repeat; background-size: contain;
+            opacity: 0; transform: scale(0.8) rotate(var(--rotate-start));
+            animation: fly-around ease-in-out infinite, flutter ease-in-out infinite;
+        }
+        
+        /* === PERBAIKAN KUPU-KUPU === */
+        /* Ganti link ini dengan link gambar kupu-kupu milikmu */
+        .butterfly.pink { 
+            background-image: url("https://i.ibb.co/bFp0N7B/butterfly-pink-1.png"); 
+        }
+        .butterfly.yellow { 
+            background-image: url("https://i.ibb.co/TtxT7k4/butterfly-yellow-1.png"); 
+        }
+        /* ============================ */
+
+        @keyframes fly-around {
+            0% { transform: translate(var(--x-start), var(--y-start)) rotate(var(--rotate-start)) scale(0.8); opacity: 0; }
+            20%, 80% { opacity: 0.7; }
+            100% { transform: translate(var(--x-end), var(--y-end)) rotate(var(--rotate-end)) scale(1.1); opacity: 0; }
+        }
+        @keyframes flutter {
+            0%, 100% { transform: translateY(-3px); }
+            50% { transform: translateY(3px); }
+        }
+
+        .cursor-particle {
+            position: fixed; left: 0; top: 0;
+            border-radius: 50%; pointer-events: none;
+            opacity: 0; z-index: 9999;
+            animation: particle-anim 1s forwards;
+        }
+        @keyframes particle-anim {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 10000;
+        }
+        .modal-overlay.show-modal { display: flex; }
+        .modal-content {
+            background: var(--bg-color); padding: 3rem;
+            border: 2px solid var(--primary-color); border-radius: 15px;
+            text-align: center; position: relative;
+            box-shadow: 0 0 30px var(--primary-color);
+            animation: fadeInScale 0.5s ease-out;
+        }
+        .modal-content h2 { font-size: 3rem; color: var(--secondary-color); font-family: var(--font-heading); }
+        .modal-content p { font-size: 1.2rem; margin-top: 1rem; }
+        .modal-close-btn {
+            position: absolute; top: 1rem; right: 1rem;
+            font-size: 2rem; color: white; cursor: pointer;
+            border: none; background: none;
+        }
+        .confetti {
+            position: fixed; top: -20px; width: 10px; height: 10px;
+            pointer-events: none; opacity: 0; z-index: 10001;
+            animation: fall linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(105vh) rotate(720deg); opacity: 1; }
+        }
+
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; color: white; position: relative;
+            background-image: url('https://i.ibb.co.com/Hp4kKrDN/Whats-App-Image-2025-10-15-at-21-16-41-cf0b987d.jpg" alt="Whats-App-Image-2025-10-15-at-21-16-41-cf0b987d" border="0"></a>');
+            background-position: center; background-repeat: no-repeat; background-size: cover;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(13, 26, 45, 0.6);
+        }
+        .hero-content { z-index: 1; }
+        .hero h1 {
+            font-family: var(--font-heading); font-size: 5.5rem;
+            text-shadow: 0 0 25px rgba(0,0,0,0.8), 0 0 10px var(--primary-color);
+            letter-spacing: 2px;
+        }
+        .hero p {
+            font-size: 1.3rem; font-style: italic;
+            margin-top: 10px;
+        }
+
+        .content-wrapper { position: relative; background-color: var(--bg-color); padding: 4rem 2rem; }
+        .section {
+            max-width: 900px; margin: 4rem auto; padding: 2.5rem;
+            background: var(--glass-bg); border: 1px solid var(--border-color);
+            border-radius: 15px; backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); text-align: center;
+            overflow: hidden; position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+        .section.has-bg::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(13, 26, 45, 0.5);
+            z-index: 0; border-radius: 15px;
+        }
+        .section.has-bg > * { position: relative; z-index: 1; }
+        .section h2 {
+            font-family: var(--font-heading); font-size: 3.5rem;
+            color: var(--primary-color); margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(234, 255, 0, 0.5);
+        }
+
+        .section.letter {
+            background-image: url('https://i.ibb.co.com/sJKzs8Vc/Desain-tanpa-judul.png" alt="Desain-tanpa-judul" border="0"></a>'); 
+            background-size: cover; background-position: center;
+        }
+        .section.letter h2, .section.letter p {
+            color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+        }
+        .section.letter p { font-size: 1.1rem; line-height: 1.8; text-align: center; }
+        
+        #countdown { display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap; }
+        .countdown-box {
+            background: var(--glass-bg); padding: 1.2rem; border-radius: 10px;
+            width: 110px; border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .countdown-box span { display: block; font-size: 3rem; font-weight: 700; color: var(--primary-color); }
+        .countdown-box p { font-size: 1rem; margin: 0; color: var(--text-color); }
+
+        .section.memory-section {
+            background-image: url('https://i.ibb.co.com/3Ykk73yT/Desain-tanpa-judul.png" alt="Desain-tanpa-judul" border="0"></a>');
+            background-size: cover; background-position: center;
+        }
+        .memory-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        
+        @keyframes dance {
+            0%, 100% { transform: rotate(-1.5deg) translateY(-4px); }
+            50% { transform: rotate(1.5deg) translateY(4px); }
+        }
+        .memory-card {
+            border-radius: 12px; border: 1px solid var(--border-color); 
+            overflow: hidden; position: relative; height: 320px; 
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            cursor: pointer; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            animation: dance 6s ease-in-out infinite alternate;
+        }
+        .memory-card:nth-child(even) { animation-delay: -3s; }
+        .memory-card:hover { 
+            animation-play-state: paused;
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.7), 0 0 45px rgba(255, 105, 180, 0.5);
+        }
+        .memory-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: var(--bg-image); background-size: cover; background-position: center;
+            animation: kenburns 20s ease-in-out infinite alternate;
+            transition: transform 0.5s ease;
+        }
+        .memory-card:hover::before { transform: scale(1.1); }
+        .memory-card .overlay {
+            background: linear-gradient(to top, rgba(13, 26, 45, 0.95) 10%, transparent 80%);
+            width: 100%; height: 100%; display: flex; flex-direction: column;
+            justify-content: flex-end; padding: 1.5rem; color: white;
+            position: relative; z-index: 1; opacity: 0; transform: translateY(30px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+        .memory-card:hover .overlay { opacity: 1; transform: translateY(0); }
+        .memory-card h3 { 
+            font-family: var(--font-heading); color: var(--primary-color); 
+            margin-bottom: 0.5rem; font-size: 1.8rem;
+        }
+        .memory-card p { font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); }
+        .memory-card h3, .memory-card p {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity 0.4s ease-out 0.2s, transform 0.4s ease-out 0.2s, color 0.5s ease;
+        }
+        .memory-card:hover h3, .memory-card:hover p { opacity: 1; transform: translateY(0); }
+        .memory-card:hover h3 { color: white; }
+        
+        .carousel { position: relative; margin-top: 2rem; }
+        .carousel-slide { 
+            display: none; font-size: 1.5rem; font-style: italic; padding: 0 4rem; 
+            line-height: 1.6; color: var(--primary-color);
+            font-family: var(--font-heading); text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+        .carousel-slide.active { display: block; animation: fadeInScale 1s forwards; }
+        
+        .carousel-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--border-color);
+            color: var(--primary-color); cursor: pointer;
+            width: 50px; height: 50px;
+            border-radius: 50%; z-index: 10;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+            display: flex; justify-content: center; align-items: center;
+            padding: 0;
+        }
+        .carousel-btn:hover { background: var(--primary-color); color: var(--bg-color); transform: translateY(-50%) scale(1.1); }
+        .carousel-btn.prev { left: 0; }
+        .carousel-btn.next { right: 0; }
+        .carousel-btn svg { width: 24px; height: 24px; }
+
+        .section.song-section {
+            background-image: url('https://i.ibb.co.com/sdXSLgfF/Desain-tanpa-judul.png" alt="Desain-tanpa-judul" border="0"></a>');
+            background-size: cover; background-position: center;
+        }
+        .spotify-playlist { padding-top: 20px; }
+        .spotify-playlist iframe { 
+            border-radius: 12px; border: 1px solid var(--border-color);
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.6);
+            max-width: 100%;
+        }
+        
+        footer {
+            text-align: center; padding: 2.5rem 1rem; margin-top: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-top: 1px solid var(--border-color); width: 100%;
+            font-size: 0.9rem;
+        }
+
+        .hidden { opacity: 0; transform: translateY(50px) scale(0.95); transition: opacity 1s ease-out, transform 1s ease-out; }
+        .show { opacity: 1; transform: translateY(0) scale(1); }
+        .typewriter {
+            display: inline-block; overflow: hidden; border-right: .15em solid var(--primary-color); 
+            white-space: nowrap; margin: 0 auto; letter-spacing: .1em;
+            animation: typing 3.5s steps(19, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink-caret { from, to { border-color: transparent } 50% { border-color: var(--primary-color); } }
+        
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes kenburns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.15); }
+        }
+
+        @media (max-width: 992px) {
+            .memory-gallery { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3.5rem; } .hero p { font-size: 1rem; }
+            .section h2 { font-size: 2.5rem; } .section.letter p { font-size: 1rem; }
+            #countdown { justify-content: space-around; }
+            .countdown-box { width: 80px; padding: 0.8rem; margin-bottom: 1rem; }
+            .countdown-box span { font-size: 2rem; }
+            .carousel-slide { font-size: 1.2rem; padding: 0 2.5rem; }
+            .carousel-btn { width: 40px; height: 40px; }
+            .carousel-btn svg { width: 20px; height: 20px; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2.8rem; } .hero p { font-size: 0.9rem; }
+            .section h2 { font-size: 2rem; } .section { padding: 1.5rem; margin: 2rem auto; }
+            .memory-gallery { grid-template-columns: 1fr; } .memory-card { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="background-effects"></div>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="typewriter">Hey, My Fav Person</h1>
+                <p>For Najwa Aidah, the person I love.</p>
+            </div>
+        </section>
+
+        <div class="content-wrapper">
+            <section class="section letter hidden">
+                <h2>All of these contain birthdays/anniversaries, memories, and songs I wrote for you.</h2>
+                <p>
+                    Hey, Dear<br><br>
+                    I made this because I accidentally stumbled upon it and wanted to learn how to make it. Coincidentally, I had this idea for you, hehe.<br><br>
+                    For Najwa Aidah,<br>
+                    From Damta Noviyan Muhamad Faiz.
+                </p>
+            </section>
+            
+            <section class="section hidden">
+                <h2>Towards Our Special Day</h2>
+                <div id="countdown">
+                    <div class="countdown-box"><span id="days">00</span><p>Days</p></div>
+                    <div class="countdown-box"><span id="hours">00</span><p>Hours</p></div>
+                    <div class="countdown-box"><span id="minutes">00</span><p>Minutes</p></div>
+                    <div class="countdown-box"><span id="seconds">00</span><p>Seconds</p></div>
+                </div>
+            </section>
+            
+            <section class="section memory-section has-bg hidden">
+                <h2>Memories</h2>
+                <div class="memory-gallery">
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/8gs9rQv/Whats-App-Image-2025-10-07-at-16-23-18-a25106f6.jpg');">
+                        <div class="overlay"><h3>Momen 1</h3><p>Deskripsi singkat momen 1.</p></div>
+                    </div>
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/xqL61rY/Whats-App-Image-2025-10-07-at-16-23-18-a25106f6.jpg');">
+                        <div class="overlay"><h3>Momen 2</h3><p>Deskripsi singkat momen 2.</p></div>
+                    </div>
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/YDNyvjC/pexels-photo-1763075.jpg');">
+                        <div class="overlay"><h3>Momen 3</h3><p>Deskripsi singkat momen 3.</p></div>
+                    </div>
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/1MjZJ31/pexels-photo-3747139.jpg');">
+                        <div class="overlay"><h3>Momen 4</h3><p>Momen spesial lainnya.</p></div>
+                    </div>
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/JqDB9N4/pexels-photo-2693212.jpg');">
+                        <div class="overlay"><h3>Momen 5</h3><p>Jangan lupakan yang ini.</p></div>
+                    </div>
+                    <div class="memory-card" style="background-image: url('https://i.ibb.co/q9dXV3F/pexels-photo-158827.jpg');">
+                        <div class="overlay"><h3>Momen 6</h3><p>Dan yang paling favorit.</p></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section hidden">
+                <h2>Words For You</h2>
+                <div class="carousel">
+                    <div class="carousel-slide active">"[Semangat terus sayangku!!!]"</div>
+                    <div class="carousel-slide">"[Jangan lupa jaga kesehatan.]"</div>
+                    <div class="carousel-slide">"[Aku selalu di sini untukmu.]"</div>
+                    <div class="carousel-slide">"[Always Loving You.]"</div>
+                    
+                    <button class="carousel-btn prev" onclick="moveSlide(-1)" aria-label="Previous Quote">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    </button>
+                    <button class="carousel-btn next" onclick="moveSlide(1)" aria-label="Next Quote">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                </div>
+            </section>
+
+            <section class="section song-section has-bg hidden">
+                <h2>🎵 My Favorite Song For You</h2>
+                <div class="spotify-playlist">
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6oo0wNg4htWN2bWPcTXXSZ?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="special-day-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button id="close-modal-btn" class="modal-close-btn">×</button>
+            <h2>Happy Special Day!</h2>
+            <p>This is a day just for you. Wishing you all the happiness, my love. ❤️</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Created by Damta Noviyan Muhamad Faiz.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const effectsContainer = document.querySelector('.background-effects');
+
+            if(effectsContainer) {
+                const numFireflies = 50;
+                for (let i = 0; i < numFireflies; i++) {
+                    let firefly = document.createElement('div');
+                    firefly.className = 'firefly';
+                    const size = (Math.random() * 3.5 + 1.5) + 'px';
+                    firefly.style.width = size;
+                    firefly.style.height = size;
+                    firefly.style.setProperty('--x-start', (Math.random() * 100) + 'vw');
+                    firefly.style.setProperty('--y-start', (Math.random() * 100) + 'vh');
+                    firefly.style.setProperty('--x-end', (Math.random() * 100) + 'vw');
+                    firefly.style.setProperty('--y-end', (Math.random() * 100) + 'vh');
+                    const moveDuration = (Math.random() * 20 + 15) + 's';
+                    const blinkDuration = (Math.random() * 6 + 4) + 's';
+                    firefly.style.animationDuration = `${moveDuration}, ${blinkDuration}`;
+                    const moveDelay = (Math.random() * 5) + 's';
+                    const blinkDelay = (Math.random() * 5) + 's';
+                    firefly.style.animationDelay = `${moveDelay}, ${blinkDelay}`;
+                    effectsContainer.appendChild(firefly);
+                }
+            }
+            
+            if(effectsContainer) {
+                const numButterflies = 12;
+                for (let i = 0; i < numButterflies; i++) {
+                    let butterfly = document.createElement('div');
+                    const colorClass = Math.random() > 0.5 ? 'pink' : 'yellow';
+                    butterfly.className = `butterfly ${colorClass}`;
+                    const size = (Math.random() * 30 + 40) + 'px';
+                    butterfly.style.width = size;
+                    butterfly.style.height = size;
+                    butterfly.style.setProperty('--x-start', (Math.random() * 100) + 'vw');
+                    butterfly.style.setProperty('--y-start', (Math.random() * 100) + 'vh');
+                    butterfly.style.setProperty('--x-end', (Math.random() * 100) + 'vw');
+                    butterfly.style.setProperty('--y-end', (Math.random() * 100) + 'vh');
+                    butterfly.style.setProperty('--rotate-start', (Math.random() * 180 - 90) + 'deg');
+                    butterfly.style.setProperty('--rotate-end', (Math.random() * 180 - 90) + 'deg');
+                    const flyDuration = (Math.random() * 15 + 10) + 's';
+                    const flutterDuration = (Math.random() * 0.3 + 0.3) + 's';
+                    butterfly.style.animationDuration = `${flyDuration}, ${flutterDuration}`;
+                    const flyDelay = (Math.random() * 8) + 's';
+                    butterfly.style.animationDelay = flyDelay;
+                    effectsContainer.appendChild(butterfly);
+                }
+            }
+
+            window.addEventListener('mousemove', function(e) {
+                let particle = document.createElement('div');
+                particle.className = 'cursor-particle';
+                document.body.appendChild(particle);
+                let size = Math.random() * 8 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                const particleColor = Math.random() > 0.5 ? 'var(--primary-color)' : 'var(--secondary-color)';
+                particle.style.background = particleColor;
+                particle.style.boxShadow = `0 0 ${Math.random() * 10 + 5}px ${particleColor}`;
+                let x = e.clientX + (Math.random() * 20) - 10;
+                let y = e.clientY + (Math.random() * 20) - 10;
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                setTimeout(() => { particle.remove(); }, 1000);
+            });
+    
+            document.querySelectorAll('.memory-card').forEach(card => {
+                const bgImage = card.style.backgroundImage;
+                if (bgImage) {
+                    card.style.setProperty('--bg-image', bgImage);
+                }
+            });
+
+            const modal = document.getElementById('special-day-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            if (modal && closeModalBtn) {
+                closeModalBtn.addEventListener('click', () => modal.classList.remove('show-modal'));
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.classList.remove('show-modal');
+                });
+            }
+        });
+
+        function startConfetti() {
+            const confettiCount = 150;
+            const colors = ['var(--primary-color)', 'var(--secondary-color)', '#FFFFFF', '#FFD700'];
+            for (let i = 0; i < confettiCount; i++) {
+                let confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 10000);
+            }
+        }
+
+        const countdown = () => {
+            const targetDate = new Date('November 2, 2025 00:00:00').getTime(); 
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+            const second = 1000, minute = second * 60, hour = minute * 60, day = hour * 24;
+            
+            const countdownEl = document.getElementById('countdown');
+            if (gap > 0 && countdownEl) {
+                document.getElementById('days').innerText = String(Math.floor(gap / day)).padStart(2, '0');
+                document.getElementById('hours').innerText = String(Math.floor((gap % day) / hour)).padStart(2, '0');
+                document.getElementById('minutes').innerText = String(Math.floor((gap % hour) / minute)).padStart(2, '0');
+                document.getElementById('seconds').innerText = String(Math.floor((gap % minute) / second)).padStart(2, '0');
+            } else if(countdownEl) {
+                countdownEl.innerHTML = `<h3 style="font-size:2.5rem; color:var(--secondary-color); font-family:var(--font-heading);">Happy Special Day! ❤️</h3>`;
+                
+                const modal = document.getElementById('special-day-modal');
+                if (modal && !modal.classList.contains('show-modal')) {
+                    modal.classList.add('show-modal');
+                    startConfetti();
+                }
+
+                clearInterval(countdownInterval);
+            }
+        };
+        const countdownInterval = setInterval(countdown, 1000);
+        countdown();
+
+        let slideIndex = 1;
+        showSlide(slideIndex);
+        function moveSlide(n) { showSlide(slideIndex += n); }
+        function showSlide(n) {
+            const slides = document.getElementsByClassName("carousel-slide");
+            if (slides.length === 0) return;
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (let i = 0; i < slides.length; i++) { slides[i].classList.remove("active"); }
+            slides[slideIndex - 1].classList.add("active");
+        }
+        setInterval(() => { moveSlide(1); }, 5000);
+
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.3 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
+</body>
+</html>
